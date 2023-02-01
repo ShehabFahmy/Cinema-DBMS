@@ -1,0 +1,18 @@
+DECLARE
+	b NUMBER;
+	h_seats seat_ed1.number_of_seats%TYPE;
+BEGIN
+IF :ticket_block.hall_id IS NOT NULL then
+	SELECT number_of_seats
+	INTO h_seats
+	FROM seat_ed1
+	WHERE seat_ed1.hall_id = :ticket_block.hall_id;
+IF :ticket_block.seatnumber > h_seats then
+	b:= show_alert('SEAT_NUMBER_ALERT');
+	:ticket_block.seatnumber := NULL;
+END IF;
+ELSE
+	b:= show_alert('HALL_ID_ALERT');
+	:ticket_block.seatnumber := NULL;
+END IF;
+END;

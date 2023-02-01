@@ -1,0 +1,183 @@
+CREATE TABLE Employee (
+SSN NUMBER(10),
+Fname VARCHAR2(25),
+lastName VARCHAR2(25),
+Salary NUMBER(10) NOT NULL,
+Gender VARCHAR2(20),
+Street VARCHAR2(25),
+City VARCHAR2(20),
+Super_SSN NUMBER(10),
+CONSTRAINT e_ssn_pk PRIMARY KEY(SSN),
+CONSTRAINT super_ssn_fk FOREIGN KEY(Super_SSN) REFERENCES Employee(SSN)
+);
+
+CREATE TABLE Customer (
+id NUMBER(10),
+Fname VARCHAR2(25) NOT NULL,
+lastName VARCHAR2(25) NOT NULL,
+age NUMBER(10),
+E_SSN NUMBER(10),
+CONSTRAINT c_id_pk PRIMARY KEY(id),
+CONSTRAINT c_e_ssn_fk FOREIGN KEY(E_SSN) REFERENCES Employee(SSN)
+);
+
+CREATE TABLE Hall (
+Hall_id NUMBER(10),
+Type VARCHAR2(25),
+location VARCHAR2(25) UNIQUE,
+CONSTRAINT Hall_id_pk PRIMARY KEY(Hall_id)
+);
+
+CREATE TABLE Discount (
+offer_id NUMBER(10),
+price NUMBER(10) NOT NULL,
+MovieName VARCHAR2(25),
+CONSTRAINT offer_id_pk PRIMARY KEY(offer_id)
+);
+
+CREATE TABLE Ticket (
+Ticket_id NUMBER(10),
+Hallnumber NUMBER(10) NOT NULL,
+Seatnumber NUMBER(10) NOT NULL,
+Mname VARCHAR2(25) NOT NULL,
+price NUMBER(10) NOT NULL,
+time NUMBER(4) NOT NULL, --datatype time
+C_id NUMBER(10),
+Hall_id NUMBER(10),
+offer_id NUMBER(10),
+E_SSN NUMBER(10),
+CONSTRAINT ticket_id_pk PRIMARY KEY(Ticket_id),
+CONSTRAINT c_id_fk FOREIGN KEY(C_id) REFERENCES Customer(id),
+CONSTRAINT hall_id_fk FOREIGN KEY(Hall_id) REFERENCES Hall(Hall_id),
+CONSTRAINT offer_id_fk FOREIGN KEY(offer_id) REFERENCES Discount(offer_id),
+CONSTRAINT t_e_ssn_fk FOREIGN KEY(E_SSN) REFERENCES Employee(SSN)
+);
+
+CREATE TABLE Movie (
+M_id NUMBER(10),
+M_name VARCHAR2(25) NOT NULL,
+type VARCHAR2(25) NOT NULL,
+Rate NUMBER(10),
+M_Start NUMBER(10),
+M_End NUMBER(10),
+CONSTRAINT M_id_pk PRIMARY KEY(M_id)
+);
+
+CREATE TABLE Emp_phone (
+Emp_SSN NUMBER(10),
+Emp_phone NUMBER(11),
+CONSTRAINT Emp_phone_pk PRIMARY KEY(Emp_SSN, Emp_phone),
+CONSTRAINT Emp_phone_fk FOREIGN KEY(Emp_SSN) REFERENCES Employee(SSN)
+);
+
+CREATE TABLE Display (
+Hall_id NUMBER(10),
+Movie_id NUMBER(10),
+CONSTRAINT display_pk PRIMARY KEY(Hall_id, Movie_id),
+CONSTRAINT display_hall_id_fk FOREIGN KEY(Hall_id) REFERENCES Hall(Hall_id),
+CONSTRAINT display_movie_id_fk FOREIGN KEY(Movie_id) REFERENCES Movie(M_id)
+);
+
+CREATE TABLE Seat_Ed1 (
+Hall_id NUMBER(10),
+number_of_seats NUMBER(10),
+CONSTRAINT seat_ed1_pk PRIMARY KEY(Hall_id),
+CONSTRAINT seat_ed1_hall_id_fk FOREIGN KEY(Hall_id) REFERENCES Hall(Hall_id)
+);
+
+CREATE TABLE Seat_Ed2 (
+Hall_id NUMBER(10),
+Seat_Num NUMBER(10),
+Seat_id NUMBER(10) UNIQUE,
+CONSTRAINT seat_ed2_pk PRIMARY KEY(Hall_id, Seat_Num),
+CONSTRAINT seat_ed2_hall_id_fk FOREIGN KEY(Hall_id) REFERENCES Hall(Hall_id)
+);
+
+INSERT INTO employee (ssn, fname, lastname, salary, gender, street, city)
+VALUES (302010, 'Hany', 'Mohamed', 2100, 'Male', 'El Merghany', 'Cairo');
+INSERT INTO employee (ssn, fname, lastname, salary, gender, street, city, super_ssn)
+VALUES (302011, 'Ahmed', 'Ismail', 3200, 'Male', 'El Nasr', 'Cairo', 302010);
+INSERT INTO employee (ssn, fname, lastname, salary, gender, street, city, super_ssn)
+VALUES (302012, 'Mohamed', 'Ali', 1500, 'Male', 'El Tahrir', 'Cairo', 302011);
+INSERT INTO employee (ssn, fname, lastname, salary, gender, street, city, super_ssn)
+VALUES (302013, 'Amira', 'Yasser', 4000, 'Female', 'Alf Maskn', 'Cairo', 302010);
+
+INSERT INTO emp_phone (emp_ssn, emp_phone)
+VALUES (302010, 01011111111);
+INSERT INTO emp_phone (emp_ssn, emp_phone)
+VALUES (302010, 01022222222);
+INSERT INTO emp_phone (emp_ssn, emp_phone)
+VALUES (302010, 01033333333);
+
+INSERT INTO customer (id, fname, lastname, age, e_ssn)
+VALUES (302014, 'Ahmed', 'Ali', 23, 302011);
+INSERT INTO customer (id, fname, lastname, age, e_ssn)
+VALUES (302015, 'Mohamed', 'Hassan', 22, 302011);
+INSERT INTO customer (id, fname, lastname, age, e_ssn)
+VALUES (302016, 'Sabry', 'Yasser', 24, 302011);
+INSERT INTO customer (id, fname, lastname, age, e_ssn)
+VALUES (302017, 'Tarek', 'Shawky', 25, 302011);
+
+INSERT INTO Discount (offer_id,price , moviename)
+VALUES (23,80,'Spiderman');
+INSERT INTO Discount (offer_id,price , moviename)
+VALUES (24,60,'Avengers');
+INSERT INTO Discount (offer_id,price , moviename)
+VALUES (25,80,'Iron Man');
+INSERT INTO Discount (offer_id,price , moviename)
+VALUES (26,40,'Black Widow');
+
+INSERT INTO hall (hall_id, type, location)
+VALUES (11246, 'vip', '2nd Hall on right');
+INSERT INTO hall (hall_id, type, location)
+VALUES (24171, 'local', '1st Hall on left');
+INSERT INTO hall (hall_id, type, location)
+VALUES (37680, 'local', '3rd Hall on left');
+
+INSERT INTO movie (m_id , m_name, type, rate, m_start, m_end)
+VALUES (10, 'Spiderman', 'Action', 9, 12, 2);
+INSERT INTO movie (m_id , m_name, type, rate, m_start, m_end)
+VALUES (11, 'Iron man', 'Action', 8, 2, 4);
+INSERT INTO movie (m_id , m_name, type, rate, m_start, m_end)
+VALUES (12, 'Anabelle', 'Horror', 9, 4, 6);
+
+INSERT INTO display (hall_id, movie_id)
+VALUES (11246, 10);
+INSERT INTO display (hall_id, movie_id)
+VALUES (24171, 11);
+INSERT INTO display (hall_id, movie_id)
+VALUES (37680, 12);
+
+INSERT INTO seat_ed1 (hall_id, number_of_seats)
+VALUES (11246, 200);
+INSERT INTO seat_ed1 (hall_id, number_of_seats)
+VALUES (24171, 100);
+INSERT INTO seat_ed1 (hall_id, number_of_seats)
+VALUES (37680, 100);
+
+INSERT INTO seat_ed2 (hall_id, seat_num, seat_id)
+VALUES (11246, 1, 1001);
+INSERT INTO seat_ed2 (hall_id, seat_num, seat_id)
+VALUES (24171, 4, 2004);
+INSERT INTO seat_ed2 (hall_id, seat_num, seat_id)
+VALUES (37680, 9, 3009);
+
+INSERT INTO ticket (ticket_id, hallnumber, seatnumber, mname, price, time, c_id, hall_id, offer_id, e_ssn)
+VALUES ( 50203010, 1, 12, 'Spiderman', 20, 12, 302014, 11246, 23, 302011);
+INSERT INTO ticket (ticket_id, hallnumber, seatnumber, mname, price, time, c_id, hall_id, offer_id, e_ssn)
+VALUES ( 50203011, 2, 41, 'Iron man', 60, 4, 302015, 24171, 25, 302011);
+INSERT INTO ticket (ticket_id, hallnumber, seatnumber, mname, price, time, c_id, hall_id, offer_id, e_ssn)
+VALUES ( 50203012, 3, 34, 'Annabelle', 100, 4, 302016, 37680, null, 302011);
+INSERT INTO ticket (ticket_id, hallnumber, seatnumber, mname, price, time, c_id, hall_id, offer_id, e_ssn)
+VALUES ( 50203013, 3, 87, 'Black Widow', 30, 6, 302017, 37680, 26, 302011);
+
+/*DROP TABLE Ticket;
+DROP TABLE Customer;
+DROP TABLE Emp_phone;
+DROP TABLE Employee;
+DROP TABLE Discount;
+DROP TABLE Seat_Ed1;
+DROP TABLE Seat_Ed2;
+DROP TABLE Display;
+DROP TABLE Hall;
+DROP TABLE Movie;*/

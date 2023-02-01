@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<jnlp spec="1.7+" codebase="http://desktop-a3udvu0:7001/forms/java">  
+<information>  
+<title>Test Form (Dev)</title>  
+<vendor>Oracle Corporation</vendor>  
+<description>Test Form (Dev) in WebStart</description>  
+</information>  
+<security>  
+<all-permissions/>  
+</security>  
+<resources>  
+<j2se version="1.7+"/>
+<jar href="frmall.jar"/>
+</resources>  
+<applet-desc name="Test Form (Dev)" main-class="oracle.forms.engine.Main" width="1" height="1">  
+    <param name="height" value="100%" />  
+    <param name="width" value="100%" />  
+    <param name="serverURL" value="/forms/lservlet?ifcfs=/forms/frmservlet?
+	ifsessid=WLS_FORMS.formsapp.999&#38;acceptLanguage=en-US"/>  
+    <param name="serverArgs" value="C:\Users\sheko\Desktop\cinema.fmx"/>
+    <param name="lookAndFeel" value="Oracle"/>
+    <param name="colorScheme" value="blaf"/>
+    <param name="logo" value="no"/>
+</applet-desc>  
+</jnlp>
